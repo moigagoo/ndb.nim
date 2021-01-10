@@ -95,7 +95,7 @@ type
     of dvkTimestamptz:
       t*: DateTime
     of dvkOther:
-      o: DbOther
+      o*: DbOther
     of dvkNull:
       discard
 
@@ -137,6 +137,10 @@ proc dbValue*(v: DbNull|type(nil)): DbValue =
   ## Caveat: ``dbValue(nil)`` doesn't compile on Nim 0.19.x, see
   ## https://github.com/nim-lang/Nim/pull/9231.
   DbValue(kind: dvkNull)
+
+proc dbValueOther*(v: string): DbValue =
+  ## Wrap string value into a ``dvkOther``.
+  DbValue(kind: dvkOther, o: DbOther(value: v))
 
 template `?`*(v: typed): DbValue =
   ## Shortcut for ``dbValue``.
